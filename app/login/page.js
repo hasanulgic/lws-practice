@@ -1,14 +1,46 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/no-unescaped-entities */
-
+"use client";
+import { login } from "@/actions";
+import { signIn } from "next-auth/react";
+import { redirect } from "next/dist/server/api-utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function page() {
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  const handleAuth = (e) => {
+    signIn("google", { callbackUrl: "http://localhost:3000" });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData(e.currentTarget)
+      const res = await login(formData)
+      if(res.err){
+        setError(res.error.message)
+      }else{
+        router.push('/')
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+
+  }
+
   return (
     <div class="contain py-16">
       <div class="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
         <h2 class="text-2xl uppercase font-medium mb-1">Login</h2>
         <p class="text-gray-600 mb-6 text-sm">welcome back customer</p>
-        <form action="#" method="post" autocomplete="off">
+        {error && (
+          <p className="text-primary my-2 text-center">There is an error</p>
+        )}
+        <form onSubmit={onSubmit} method="post" autocomplete="off">
           <div class="space-y-2">
             <div>
               <label for="email" class="text-gray-600 mb-2 block">
@@ -75,12 +107,12 @@ export default function page() {
           >
             facebook
           </a>
-          <a
-            href="#"
+          <button
+            onClick={handleAuth}
             class="w-1/2 py-2 text-center text-white bg-red-600 rounded uppercase font-roboto font-medium text-sm hover:bg-red-500"
           >
             google
-          </a>
+          </button>
         </div>
         {/* <!-- ./login with --> */}
 
