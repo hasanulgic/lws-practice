@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function page() {
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleAuth = (e) => {
@@ -19,18 +19,19 @@ export default function page() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData(e.currentTarget)
-      const res = await login(formData)
-      if(res.err){
-        setError(res.error.message)
-      }else{
-        router.push('/')
+      const formData = new FormData(e.currentTarget);
+      const res = await login(formData);
+      console.log(res);
+      if (res.err) {
+        setError(res?.error?.message);
+      } else {
+        router.push("/");
       }
     } catch (error) {
+      console.log(error);
       setError(error.message);
     }
-
-  }
+  };
 
   return (
     <div class="contain py-16">
@@ -38,7 +39,7 @@ export default function page() {
         <h2 class="text-2xl uppercase font-medium mb-1">Login</h2>
         <p class="text-gray-600 mb-6 text-sm">welcome back customer</p>
         {error && (
-          <p className="text-primary my-2 text-center">There is an error</p>
+          <p className="text-primary my-2 text-center">There is an error, {error}</p>
         )}
         <form onSubmit={onSubmit} method="post" autocomplete="off">
           <div class="space-y-2">

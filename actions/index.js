@@ -9,8 +9,10 @@ export async function login(formData){
             password: formData.get('password'),
             redirect: false
         })
+        console.log(res)
         return res
     } catch (error) {
+        console.log(error.message)
         throw new Error(error)
     }
 }

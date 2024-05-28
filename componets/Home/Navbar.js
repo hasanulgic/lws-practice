@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 export default async function Navbar() {
     const session = await auth();
+    console.log(session)
     
   return (
     <nav class="bg-gray-800">
@@ -111,6 +112,7 @@ export default async function Navbar() {
           {session?.user?.email ? (
             <>
               <span className="text-white">{session?.user?.name}</span>
+              <span className="text-white">{session?.user?.email}</span>
               <LogoutBtn/>
             </>
           ) : (
